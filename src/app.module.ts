@@ -11,6 +11,7 @@ import { Tenant } from './tenant/entity/tenant.entity';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/auth.gaurd';
 import { JwtModule } from '@nestjs/jwt';
+import { Credentials } from './auth/entity/credentials';
 
 @Module({
   imports: [
@@ -21,7 +22,6 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'your_secret_here',
-      signOptions: { expiresIn: '1d' },
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -32,8 +32,8 @@ import { JwtModule } from '@nestjs/jwt';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Tenant],
-        synchronize: true, // don't use this in production -
+        entities: [User, Tenant, Credentials],
+        synchronize: true, // don't use this in production
       }),
       inject: [ConfigService],
     }),
